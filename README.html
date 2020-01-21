@@ -1,0 +1,53 @@
+<h1 style="text-align: center;"><strong>README</strong></h1>
+<p>&nbsp;</p>
+<p>Igor Morozov, ID 332562123</p>
+<p>Program: ex2 and JDBC</p>
+<p>&nbsp;</p>
+<p>This program contains classes: Crawl, LessThenZeroException,&nbsp;</p>
+<p>LineOfThreads, NotEnoughtArgumentsException, ReadFromFile, ReadURL</p>
+<p>and text file "urls" with list urls:&nbsp;</p>
+<p>&nbsp;</p>
+<p>http://www.hac.ac.il<br />https://www.journaldev.com<br />https://www.baeldung.com<br />https://developermedia.com<br />https://www.tutorialspoint.com<br />https://www.geeksforgeeks.org<br />https://www.golfgroup.co.il<br />https://www.airemaster.com/wp-content/uploads/2017/07/sds-safety-data-sheets.png<br />https://img.wcdn.co.il/f_auto,w_300,t_54/2/7/4/1/2741179-46.jpg<br />https://ttttt.wcdn.co.il/f0,t_54/2/7/4/1/2741179-46.jpg<br />x.com/gh</p>
+<p>&nbsp;</p>
+<p>In this exercise, you will build a simple web crawler that scans URLs of images, record thread performance, and stores them in a database (only the URL, not the image itself).</p>
+<p>&nbsp;</p>
+<h2>Requirements:</h2>
+<ol>
+<li>Input: a TEXT file containing one URL per line. The program must check that the file exists (if it doesn&rsquo;t it displays an error message and exits), the file may be empty in which case it will do nothing.</li>
+<li>The program receives 4 mandatory arguments:
+<ol>
+<li>first a pool size (positive non zero number, see below),</li>
+<li>second a delay for retries (positive non zero milliseconds),</li>
+<li>third a number of retries,</li>
+<li>fourth a file name (1)</li>
+</ol>
+</li>
+<li>If any argument is missing or invalid it displays a usage message and exits</li>
+<li>The program creates one thread per URL to be processed.</li>
+<li>The number of simultaneous threads is limited (the pool size) therefore you must handle a thread pool for threads processing the URLs (explained in class)</li>
+<li>The URL will be analyzed and only URL of images will be inserted in the database. If the image URL is already in the database, it should not be inserted (no duplicates).</li>
+<li>When connecting to a URL, in case of connection/read failure your thread should sleep() for the duration given as delay for retries (the 2nd argument given in the program), then try X times to reconnect (X being the 3<sup>rd</sup> argument given in the program)</li>
+<li>In the case the URL is simply malformed there is no point to try again (you give up), the retries should be used only on valid URLs (connection problems).</li>
+</ol>
+<h2>Program Arguments</h2>
+<p>The main class of your program should be named <em>Crawl</em>.</p>
+<p>For example:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; java Crawl&nbsp; 5 1000 3 urls.txt</p>
+<p>means the program will handle a pool size of 5 threads, the retry delay will be one second, the max number of retries will be 3 times and the file containing the urls will be named urls.txt.</p>
+<p>&nbsp;</p>
+<h2>Output:</h2>
+<p>The program should record the performance of each thread: elapsed time (thread duration measured with System.currentTimeMillis()), and print out results <em>in the order the input file was given </em>(which is not necessarily the threads execution order):</p>
+<p>http://a.b.c/logo.jpeg : 1002 ms<br /> http://a.b.c/abc: 45 ms <br /> http://a.b.c/def : timeout<br /> x.com/gh : failed</p>
+<p>&nbsp;</p>
+<p>Please respect the exact output format:</p>
+<p>&lt;url&gt;:&lt;space&gt;[&lt;time&gt;|timeout|failed]</p>
+<p>&lt;time&gt;:&lt;number&gt;&lt;space&gt;ms</p>
+<p>&nbsp;</p>
+<p>Note the possible cases:</p>
+<ul>
+<li>Success opening the URL, displaying the thread duration</li>
+<li>Malformed URL: displaying &ldquo;failed&rdquo;</li>
+<li>Tried and ran out of time: &ldquo;timeout&rdquo;</li>
+</ul>
+<p>&nbsp;</p>
+<p>The program should also display the whole content of the database after all URL are entered (perform a &ldquo;SELECT *&rdquo; in the table <em>after all threads are finished</em>). You can also write this as a separate program to run independently (this is for the grader to check the database contents).</p>
